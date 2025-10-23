@@ -1,10 +1,10 @@
-###WebScrapper
+### WebScrapper
 
-WebScrapper simply written in go
+A Web Scrapper simply written in go (cuz why not)
 
 ---
 
-##📝 Todo / Planned Features
+## 📝 Todo / Planned Features
 
     -Add support for custom headers, cookies, and user agents
 
@@ -21,7 +21,7 @@ WebScrapper simply written in go
 
 ---
 
-##⚠️ Notes
+## ⚠️ Notes
 
     -On going project
 
