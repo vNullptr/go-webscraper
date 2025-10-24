@@ -1,18 +1,14 @@
 package main
 
 import (
-	"webscrapper/internal/fetcher"
 	"fmt"
+	"webscraper/scraper"
 )
-
 
 func main() {
 
-	fetcher := fetcher.HttpClient{
-		Url: "http://example.com",
-		Method: "GET",
-	}
-	var result, _ = fetcher.Fetch()
-	fmt.Println(result)
+	s := scraper.Scraper{}
+	body, _ := s.DlUrl("https://www.example.com", "GET")
+	fmt.Println(string(body))
 
 }
