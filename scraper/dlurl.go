@@ -10,9 +10,9 @@ import (
 
 // removed httpClient struct its not needed
 
-// need to use http.NewRequest for other methods and custom headers
-// bonus : add timeout handling
-func (s *Scraper) DlUrl(rawUrl string, method string) ([]byte, error) {
+// need to add custom header handling
+// and add timeout handling
+func (s *Scraper) DlUrl(rawUrl string, method string) ([]byte, int, error) {
 
 	//creating the request
 	ctx := context.Background()
@@ -22,14 +22,20 @@ func (s *Scraper) DlUrl(rawUrl string, method string) ([]byte, error) {
 
 	req, err := http.NewRequestWithContext(ctx, method, parsedUrl.String(), nil)
 	if err != nil {
-		return nil, fmt.Errorf("creating HTTP request failed %w", err)
+		return nil, 0, fmt.Errorf("creating HTTP request failed %w", err)
 	}
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
-		return nil, fmt.Errorf("failed sending the http request %w", err)
+		// incase we receive a fail response
+		if resp != nil {
+			defer resp.Body.Close()
+			return nil, resp.StatusCode, fmt.Errorf("failed sending the http request %w", err)
+		}
+
+		return nil, 0, fmt.Errorf("failed sending the http request %w", err)
 	}
 
 	body, _ := io.ReadAll(resp.Body)
-	return body, nil
+	return body, resp.StatusCode, nil
 
 }
