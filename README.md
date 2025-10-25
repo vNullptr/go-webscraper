@@ -8,11 +8,12 @@ A Web Scrapper simply written in go (cuz why not)
 - Add support for custom headers, cookies, and user agents.
 - Add timeout and retry logic for requests.
 - Modular parser system for HTML, JSON, and XML.
-- CLI tool for quick scraping tasks.
+- Concurrency for faster scraping of multiple URLs.
 - Configuration via JSON/YAML file for multiple endpoints.
-- Optional concurrency for faster scraping of multiple URLs.
+- CLI tool for quick scraping tasks. ( Optional )
 
 ## ⚠️ Notes
 
-    -On going project
+- On going project
+- Still deciding the structure
 
