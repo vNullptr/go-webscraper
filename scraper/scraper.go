@@ -11,6 +11,7 @@ type Scraper struct {
 
 	mu sync.RWMutex
 	unparsedHTML []byte
+	selectors []string
 }
 
 // thinking about making timeout tied to the scraper instance
