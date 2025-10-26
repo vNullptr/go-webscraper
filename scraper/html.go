@@ -13,6 +13,7 @@ func (s *Scraper) ParseHTML() {
 	doc, err := html.Parse(rawHTML)
 	if err != nil {
 		fmt.Println("error happened while parsing html")
+		return
 	}
 
 	traverseDOM(doc, "p")
