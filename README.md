@@ -10,7 +10,7 @@ A Web Scrapper simply written in go (cuz why not)
 - Modular parser system for HTML, JSON, and XML.
 - Concurrency for faster scraping of multiple URLs.
 - Configuration via JSON/YAML file for multiple endpoints.
-- CLI tool for quick scraping tasks. ( Optional )
+- CLI tool for quick scraping tasks. ( Not sure if i want to do this, cba )
 
 ## ⚠️ Notes
 
