@@ -20,14 +20,14 @@ func NewScraper() *Scraper {
 }
 
 // still defaulting to string type haven't done any testing with the interface
-func (s *Scraper) AppendDataUnit(name string, selectorMap map[string][]string) {
+func (s *Scraper) DataUnit(name string, dataType string, selectorMap map[string][]string) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
 	du := DataUnit{
 		name:      name,
-		dataType:  "string",
-		data:      []string{}, // defaulting to string for now
+		dataType:  dataType,
+		data:      []string{}, 
 		selectors: selectorMap,
 	}
 
