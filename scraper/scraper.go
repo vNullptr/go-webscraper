@@ -1,6 +1,7 @@
 package scraper
 
 import (
+	"fmt"
 	"sync"
 )
 
@@ -33,6 +34,14 @@ func (s *Scraper) DataUnit(name string, dataType string, selectorMap map[string]
 
 	s.targetData = append(s.targetData, du)
 }
+
+
+func (s *Scraper) DebugShowData(){
+	for _, dataUnit := range s.targetData {
+		fmt.Println(dataUnit.data)
+	}
+}
+
 
 func (s *Scraper) GetUnparsedHTML() []byte {
 	// for thread safety ( because we're having concurrent access)
