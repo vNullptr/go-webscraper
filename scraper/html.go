@@ -21,8 +21,8 @@ func (s *Scraper) ParseHTML() error {
 		return fmt.Errorf("error happened while parsing html : %w", err)
 	}
 
-	for _, v := range s.targetData {
-		traverseDOM(doc, &v)
+	for i := range s.targetData {
+		traverseDOM(doc, &s.targetData[i])
 	}
 
 	return nil
