@@ -41,7 +41,7 @@ func traverseDOM(doc *html.Node, dUnit *DataUnit) {
 
 		if len(dUnit.selectors["element"]) != 0 {
 			for _, elem := range dUnit.selectors["element"] {
-				if n.Parent.Data == elem {
+				if n.Parent.Type == html.ElementNode && n.Parent.Data == elem {
 					dUnit.data = append(dUnit.data, n.Data)
 				}
 			}
@@ -52,6 +52,18 @@ func traverseDOM(doc *html.Node, dUnit *DataUnit) {
 				for _, class := range dUnit.selectors["class"] {
 					for _, a := range n.Parent.Attr {
 						if a.Key == "class" && strings.Contains(a.Val, class) {
+							dUnit.data = append(dUnit.data, n.Data)
+						}
+					}
+				}
+			}
+		}
+
+		if len(dUnit.selectors["id"]) != 0 {
+			if n.Type == html.TextNode {
+				for _, id := range dUnit.selectors["id"] {
+					for _, a := range n.Parent.Attr {
+						if a.Key == "id" && a.Val == id {
 							dUnit.data = append(dUnit.data, n.Data)
 						}
 					}
