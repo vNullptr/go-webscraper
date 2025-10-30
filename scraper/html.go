@@ -8,7 +8,7 @@ import (
 	"golang.org/x/net/html"
 )
 
-func (s *Scraper) ParseHTML() error {
+func (s *Scraper) ParseHTML() ( *html.Node, error) {
 
 	if len(s.targetData) == 0 {
 		panic("Target data units not initialized !")
@@ -18,15 +18,18 @@ func (s *Scraper) ParseHTML() error {
 	doc, err := html.Parse(rawHTML)
 	if err != nil {
 		fmt.Println("error happened while parsing html")
-		return fmt.Errorf("error happened while parsing html : %w", err)
+		return nil,fmt.Errorf("error happened while parsing html : %w", err)
 	}
 
+	return doc,nil
+
+}
+
+
+func (s *Scraper) SearchHTML( doc *html.Node ) {
 	for i := range s.targetData {
 		traverseDOM(doc, &s.targetData[i])
 	}
-
-	return nil
-
 }
 
 // PS : decided to go with this simple / unefficient structure for now 
@@ -42,6 +45,7 @@ func traverseDOM(doc *html.Node, dUnit *DataUnit) {
 		if len(dUnit.selectors["element"]) != 0 {
 			for _, elem := range dUnit.selectors["element"] {
 				if n.Parent.Type == html.ElementNode && n.Parent.Data == elem {
+					// might want to make it return instead of directly store 
 					dUnit.data = append(dUnit.data, n.Data)
 				}
 			}

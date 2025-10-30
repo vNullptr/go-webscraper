@@ -12,7 +12,8 @@ func main() {
 	})
 	s.DlUrl("https://www.coursera.org", "GET", nil)
 	//fmt.Println(string(s.GetUnparsedHTML()))
-	s.ParseHTML()
+	doc , _ := s.ParseHTML()
+	s.SearchHTML(doc)
 	s.DebugShowData()
 
 }
