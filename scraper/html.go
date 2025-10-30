@@ -3,6 +3,7 @@ package scraper
 import (
 	"bytes"
 	"fmt"
+	"strings"
 
 	"golang.org/x/net/html"
 )
@@ -20,18 +21,17 @@ func (s *Scraper) ParseHTML() error {
 		return fmt.Errorf("error happened while parsing html : %w", err)
 	}
 
-	// idk if i want to do this -> PS 2
 	for _, v := range s.targetData {
-		traverseDOM(doc, v)
+		traverseDOM(doc, &v)
 	}
 
 	return nil
 
 }
 
-// PS : this is a test still thinking about how to make this "modular" to take any combination of selectors
-// PS 2 : decided on how to have custom selectors and store the found data, still deciding on how to do the search
-func traverseDOM(doc *html.Node, dUnit DataUnit) {
+// PS : decided to go with this simple / unefficient structure for now 
+// until i have enough time to make my own node tree to clean up the html.Node mess to make the search better n faster
+func traverseDOM(doc *html.Node, dUnit *DataUnit) {
 
 	for n := range doc.Descendants() {
 
@@ -42,7 +42,7 @@ func traverseDOM(doc *html.Node, dUnit DataUnit) {
 		if len(dUnit.selectors["element"]) != 0 {
 			for _, elem := range dUnit.selectors["element"] {
 				if n.Parent.Data == elem {
-					fmt.Println(n.Data)
+					dUnit.data = append(dUnit.data, n.Data)
 				}
 			}
 		}
@@ -51,8 +51,8 @@ func traverseDOM(doc *html.Node, dUnit DataUnit) {
 			if n.Type == html.TextNode {
 				for _, class := range dUnit.selectors["class"] {
 					for _, a := range n.Parent.Attr {
-						if a.Key == "class" && a.Val == class {
-							fmt.Println(n.Data)
+						if a.Key == "class" && strings.Contains(a.Val, class) {
+							dUnit.data = append(dUnit.data, n.Data)
 						}
 					}
 				}
