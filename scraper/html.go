@@ -30,47 +30,55 @@ func (s *Scraper) ParseHTML() ( error) {
 
 func (s *Scraper) SearchHTML() {
 	for i := range s.targetData {
-		traverseDOM(s.htmlRoot, &s.targetData[i])
+		s.traverseDOM(s.htmlRoot, i)
 	}
 }
 
 // PS : decided to go with this simple / unefficient structure for now 
 // until i have enough time to make my own node tree to clean up the html.Node mess to make the search better n faster
-func traverseDOM(doc *html.Node, dUnit *DataUnit) {
+func (s *Scraper) traverseDOM(doc *html.Node, index int) {
 
 	for n := range doc.Descendants() {
+
+		if n.Type == html.ElementNode {
+			for _, a := range n.Attr {
+				if a.Key == "href" {
+					// will start a Scrape on another thread
+				}
+			}
+		}
 
 		if n.Type != html.TextNode && n.Parent.Type != html.ElementNode {
 			continue
 		}
 
-		if len(dUnit.selectors["element"]) != 0 {
-			for _, elem := range dUnit.selectors["element"] {
+		if len(s.targetData[index].selectors["element"]) != 0 {
+			for _, elem := range s.targetData[index].selectors["element"] {
 				if n.Parent.Type == html.ElementNode && n.Parent.Data == elem {
 					// might want to make it return instead of directly store 
-					dUnit.data = append(dUnit.data, n.Data)
+					s.targetData[index].data = append(s.targetData[index].data, n.Data)
 				}
 			}
 		}
 
-		if len(dUnit.selectors["class"]) != 0 {
+		if len(s.targetData[index].selectors["class"]) != 0 {
 			if n.Type == html.TextNode {
-				for _, class := range dUnit.selectors["class"] {
+				for _, class := range s.targetData[index].selectors["class"] {
 					for _, a := range n.Parent.Attr {
 						if a.Key == "class" && strings.Contains(a.Val, class) {
-							dUnit.data = append(dUnit.data, n.Data)
+							s.targetData[index].data = append(s.targetData[index].data, n.Data)
 						}
 					}
 				}
 			}
 		}
 
-		if len(dUnit.selectors["id"]) != 0 {
+		if len(s.targetData[index].selectors["id"]) != 0 {
 			if n.Type == html.TextNode {
-				for _, id := range dUnit.selectors["id"] {
+				for _, id := range s.targetData[index].selectors["id"] {
 					for _, a := range n.Parent.Attr {
 						if a.Key == "id" && a.Val == id {
-							dUnit.data = append(dUnit.data, n.Data)
+							s.targetData[index].data = append(s.targetData[index].data, n.Data)
 						}
 					}
 				}
@@ -81,7 +89,7 @@ func traverseDOM(doc *html.Node, dUnit *DataUnit) {
 
 	// recursive search ( visits all children )
 	for c := doc.FirstChild; c != nil; c = doc.NextSibling {
-		traverseDOM(c, dUnit)
+		s.traverseDOM(c, index)
 	}
 
 }
