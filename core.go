@@ -10,7 +10,7 @@ func main() {
 	s.DataUnit("main text", "string",map[string][]string{
 		"class": {"price_color"},
 	})
-	s.DlUrl("https://books.toscrape.com", "GET", nil)
+	s.FetchURL("https://books.toscrape.com", "GET", nil)
 	//fmt.Println(string(s.GetUnparsedHTML()))
 	doc , _ := s.ParseHTML()
 	s.SearchHTML(doc)

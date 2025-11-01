@@ -12,7 +12,7 @@ import (
 
 // need to add custom header handling
 // and add timeout handling
-func (s *Scraper) DlUrl(rawUrl string, method string, ctx context.Context) (int, error) {
+func (s *Scraper) FetchURL(rawUrl string, method string, ctx context.Context) (int, error) {
 
 	//creating the request
 	if ctx == nil {
