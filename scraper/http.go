@@ -12,7 +12,6 @@ import (
 // removed httpClient struct its not needed
 
 // need to add custom header handling
-// and add timeout handling
 func (s *Scraper) FetchURL(rawUrl string, method string, ctx context.Context) (int, error) {
 
 	//creating the request
@@ -51,7 +50,6 @@ func (s *Scraper) FetchURLWithRetry(rawUrl string, method string, timeoutDelay i
         status, err := s.FetchURL(rawUrl, method, ctx)
         cancel() // call per-iteration to avoid leaking resources
 
-        // success -> stop
         if err == nil && status >= 200 && status < 300 {
             return nil
         }
@@ -59,11 +57,6 @@ func (s *Scraper) FetchURLWithRetry(rawUrl string, method string, timeoutDelay i
         // non-retryable client error (except 429)
         if err == nil && status >= 400 && status < 500 && status != 429 {
             return fmt.Errorf("non-retryable status %d", status)
-        }
-
-        // if not last attempt, wait (simple backoff)
-        if i < limit-1 {
-            time.Sleep(time.Second * time.Duration(1<<uint(i))) // 1s, 2s, 4s...
         }
     }
 
