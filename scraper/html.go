@@ -8,7 +8,7 @@ import (
 	"golang.org/x/net/html"
 )
 
-func (s *Scraper) ParseHTML() ( *html.Node, error) {
+func (s *Scraper) ParseHTML() ( error) {
 
 	if len(s.targetData) == 0 {
 		panic("Target data units not initialized !")
@@ -18,17 +18,19 @@ func (s *Scraper) ParseHTML() ( *html.Node, error) {
 	doc, err := html.Parse(rawHTML)
 	if err != nil {
 		fmt.Println("error happened while parsing html")
-		return nil,fmt.Errorf("error happened while parsing html : %w", err)
+		return fmt.Errorf("error happened while parsing html : %w", err)
 	}
 
-	return doc,nil
+	s.htmlRoot = doc
+
+	return nil
 
 }
 
 
-func (s *Scraper) SearchHTML( doc *html.Node ) {
+func (s *Scraper) SearchHTML() {
 	for i := range s.targetData {
-		traverseDOM(doc, &s.targetData[i])
+		traverseDOM(s.htmlRoot, &s.targetData[i])
 	}
 }
 
