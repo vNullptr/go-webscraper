@@ -61,3 +61,7 @@ func (s *Scraper) GetUnparsedHTML() []byte {
 
 	return cp
 }
+
+func (s *Scraper) Scrape() {
+	// for later
+}

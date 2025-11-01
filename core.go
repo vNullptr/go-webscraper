@@ -8,9 +8,9 @@ func main() {
 
 	s := scraper.NewScraper()
 	s.DataUnit("main text", "string",map[string][]string{
-		"element": {"h2", "h1"},
+		"class": {"price_color"},
 	})
-	s.DlUrl("https://www.coursera.org", "GET", nil)
+	s.DlUrl("https://books.toscrape.com", "GET", nil)
 	//fmt.Println(string(s.GetUnparsedHTML()))
 	doc , _ := s.ParseHTML()
 	s.SearchHTML(doc)
