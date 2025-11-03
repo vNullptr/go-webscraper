@@ -29,6 +29,7 @@ func (s *Scraper) ParseHTML() ( error ) {
 
 
 // might seem useless until i make the a node tree to store cleaned up html.Node tree 
+// basically these are wrappers
 func (s *Scraper) DOM() *html.Node{
 	return s.htmlRoot
 }
@@ -37,7 +38,7 @@ func (s *Scraper) FirstChild(node *html.Node) *html.Node {
 	return node.FirstChild
 }
 
-func (s *Scraper) ChildAt( node *html.Node, index int) *html.Node {
+func (s *Scraper) NthChild( node *html.Node, index int) *html.Node {
 	child := node
 
 	for range index {
@@ -50,7 +51,12 @@ func (s *Scraper) ChildAt( node *html.Node, index int) *html.Node {
 	}
 
 	return child 
-} 
+}
+
+func (s *Scraper) Parent(node *html.Node) *html.Node {
+	return node.Parent
+}
+
 
 
 //	These functions below will be deleted at some point
