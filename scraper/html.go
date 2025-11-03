@@ -8,7 +8,7 @@ import (
 	"golang.org/x/net/html"
 )
 
-func (s *Scraper) ParseHTML() ( error) {
+func (s *Scraper) ParseHTML() ( error ) {
 
 	if len(s.targetData) == 0 {
 		panic("Target data units not initialized !")
@@ -26,6 +26,34 @@ func (s *Scraper) ParseHTML() ( error) {
 	return nil
 
 }
+
+
+// might seem useless until i make the a node tree to store cleaned up html.Node tree 
+func (s *Scraper) DOM() *html.Node{
+	return s.htmlRoot
+}
+
+func (s *Scraper) FirstChild(node *html.Node) *html.Node {
+	return node.FirstChild
+}
+
+func (s *Scraper) ChildAt( node *html.Node, index int) *html.Node {
+	child := node
+
+	for range index {
+
+		if node.NextSibling == nil { 
+			return nil 
+		}
+		child = node.NextSibling
+
+	}
+
+	return child 
+} 
+
+
+//	These functions below will be deleted at some point
 
 
 func (s *Scraper) SearchHTML() {
