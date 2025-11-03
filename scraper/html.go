@@ -57,6 +57,14 @@ func (s *Scraper) Parent(node *html.Node) *html.Node {
 	return node.Parent
 }
 
+func (s *Scraper) Children(node *html.Node) []*html.Node {
+	var childrens []*html.Node
+	for c := node.FirstChild; c != nil; c = c.NextSibling {
+		childrens = append(childrens, c)
+	}
+
+	return childrens
+}
 
 
 //	These functions below will be deleted at some point
