@@ -69,15 +69,28 @@ func (s *Scraper) GetAttr(node *html.Node) []html.Attribute {
 	return node.Attr
 }
 
-func (s *Scraper) HasAttr(node *html.Node, key string, value string) *html.Node {
+func (s *Scraper) HasAttr(node *html.Node, key string, value string) bool {
 	attr := s.GetAttr(node)
 	for index := range attr {
 		if attr[index].Key == key {
 			if strings.Contains(attr[index].Val, value) {
-				return node
+				return true
 			}
 		}
 	}
+	return false
+}
+
+func (s *Scraper) FindByAttr(root *html.Node, key string, value string) *html.Node {
+
+	if s.HasAttr(root, key, value) {
+		return root
+	}
+
+	for c := root; c != nil; c = c.NextSibling {
+		s.FindByAttr(c, key, value)
+	}
+
 	return nil
 }
 
