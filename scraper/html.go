@@ -94,6 +94,16 @@ func (s *Scraper) FindByAttr(root *html.Node, key string, value string) *html.No
 	return nil
 }
 
+func (s *Scraper) IsTag(node *html.Node, tagname string) bool {
+	if node.Type == html.ElementNode {
+		if node.Data == tagname {
+			return true 
+		}
+	}
+
+	return false
+}
+
 func (s *Scraper) FindUntilTag(root *html.Node, key string, value string, endKey string) *html.Node {
 	if s.HasAttr(root, key, value) {
 		return root
