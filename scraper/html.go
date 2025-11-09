@@ -105,11 +105,14 @@ func (s *Scraper) IsTag(node *html.Node, tagname string) bool {
 }
 
 func (s *Scraper) FindUntilTag(root *html.Node, key string, value string, endKey string) *html.Node {
+	
 	if s.HasAttr(root, key, value) {
 		return root
 	}
 
-	// need to return nil if its the Tag
+	if s.IsTag(root, endKey) {
+		return nil
+	}
 
 	for c := root; c != nil; c = c.NextSibling {
 		s.FindUntilTag(c, key, value, endKey)
