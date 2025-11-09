@@ -94,6 +94,20 @@ func (s *Scraper) FindByAttr(root *html.Node, key string, value string) *html.No
 	return nil
 }
 
+func (s *Scraper) FindUntilTag(root *html.Node, key string, value string, endKey string) *html.Node {
+	if s.HasAttr(root, key, value) {
+		return root
+	}
+
+	// need to return nil if its the Tag
+
+	for c := root; c != nil; c = c.NextSibling {
+		s.FindUntilTag(c, key, value, endKey)
+	}
+
+	return nil
+}
+
 //	These functions below will be deleted at some point
 
 func (s *Scraper) SearchHTML() {
