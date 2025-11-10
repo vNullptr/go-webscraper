@@ -91,6 +91,11 @@ func (s *Scraper) HasAttr(node *html.Node, key string, value string) bool {
 	return false
 }
 
+// wrapper for clarity uses HasAttr()
+func (s *Scraper) HasClass(node *html.Node, class string ) bool {
+	return s.HasAttr(node, "class", class)
+}
+
 // will add error handling later ( winApi style with lastError in the struct )
 func (s *Scraper) FirstByAttr(node *html.Node, key string, value string) *html.Node {
 
