@@ -88,7 +88,7 @@ func (s *Scraper) FindByAttr(root *html.Node, key string, value string) *html.No
 	}
 
 	for c := root; c != nil; c = c.NextSibling {
-		s.FindByAttr(c, key, value)
+		return s.FindByAttr(c, key, value)
 	}
 
 	return nil
@@ -115,7 +115,7 @@ func (s *Scraper) FindUntilTag(root *html.Node, key string, value string, endKey
 	}
 
 	for c := root; c != nil; c = c.NextSibling {
-		s.FindUntilTag(c, key, value, endKey)
+		return s.FindUntilTag(c, key, value, endKey)
 	}
 
 	return nil
