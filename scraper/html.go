@@ -34,10 +34,14 @@ func (s *Scraper) DOM() *html.Node {
 }
 
 func (s *Scraper) FirstChild(node *html.Node) *html.Node {
+	if node == nil { return nil }
 	return node.FirstChild
 }
 
 func (s *Scraper) NthChild(node *html.Node, index int) *html.Node {
+
+	if node == nil { return nil }
+
 	child := node
 
 	for range index {
@@ -53,10 +57,13 @@ func (s *Scraper) NthChild(node *html.Node, index int) *html.Node {
 }
 
 func (s *Scraper) Parent(node *html.Node) *html.Node {
+	if node == nil { return nil }
 	return node.Parent
 }
 
 func (s *Scraper) Children(node *html.Node) []*html.Node {
+	if node == nil { return nil }
+	
 	var childrens []*html.Node
 	for c := node.FirstChild; c != nil; c = c.NextSibling {
 		childrens = append(childrens, c)
@@ -66,10 +73,13 @@ func (s *Scraper) Children(node *html.Node) []*html.Node {
 }
 
 func (s *Scraper) GetAttr(node *html.Node) []html.Attribute {
+	if node == nil { return nil }
 	return node.Attr
 }
 
 func (s *Scraper) HasAttr(node *html.Node, key string, value string) bool {
+	if node == nil { return false }
+
 	attr := s.GetAttr(node)
 	for index := range attr {
 		if attr[index].Key == key {
@@ -81,20 +91,26 @@ func (s *Scraper) HasAttr(node *html.Node, key string, value string) bool {
 	return false
 }
 
-func (s *Scraper) FindByAttr(root *html.Node, key string, value string) *html.Node {
+// will add error handling later ( winApi style with lastError in the struct )
+func (s *Scraper) FirstByAttr(node *html.Node, key string, value string) *html.Node {
 
-	if s.HasAttr(root, key, value) {
-		return root
+  	if node == nil { return nil }
+
+	if s.HasAttr(node, key, value) {
+		return node
 	}
 
-	for c := root; c != nil; c = c.NextSibling {
-		return s.FindByAttr(c, key, value)
+	for c := node; c != nil; c = c.NextSibling {
+		return s.FirstByAttr(c, key, value)
 	}
 
 	return nil
 }
 
 func (s *Scraper) IsTag(node *html.Node, tagname string) bool {
+	
+	if node == nil { return false }
+	
 	if node.Type == html.ElementNode {
 		if node.Data == tagname {
 			return true 
@@ -106,18 +122,17 @@ func (s *Scraper) IsTag(node *html.Node, tagname string) bool {
 
 // this search's tags but can't be doing one for class by tag then class by class ect ect ...
 // will probably use a func callback as argument
-func (s *Scraper) FindUntilTag(root *html.Node, key string, value string, endKey string) *html.Node {
+func (s *Scraper) FirstUntilTag(root *html.Node, key string, value string, limiterTag string) *html.Node {
 	
-	if s.HasAttr(root, key, value) {
+	if root == nil || s.IsTag(root, limiterTag) { return nil }
+
+
+	if s.HasAttr(root, key, value){
 		return root
 	}
 
-	if s.IsTag(root, endKey) {
-		return nil
-	}
-
 	for c := root; c != nil; c = c.NextSibling {
-		return s.FindUntilTag(c, key, value, endKey)
+		return s.FirstUntilTag(c, key, value, limiterTag)
 	}
 
 	return nil
