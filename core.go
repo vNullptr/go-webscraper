@@ -13,7 +13,6 @@ func main() {
 	s.FetchURL("https://books.toscrape.com", "GET", nil)
 	//fmt.Println(string(s.GetUnparsedHTML()))
 	s.ParseHTML()
-	s.SearchHTML()
 	s.DebugShowData()
 
 }
