@@ -126,7 +126,7 @@ func (s *Scraper) IsTag(node *html.Node, tagname string) bool {
 }
 
 // will still keep the other commonly used function and keep this one for more specific search
-func (s *Scraper) Walk(node *html.Node, callback func(*html.Node)bool) *html.Node{
+func (s *Scraper) WalkToFirst(node *html.Node, callback func(*html.Node)bool) *html.Node{
 
 	if node == nil { return nil }
 
@@ -135,7 +135,7 @@ func (s *Scraper) Walk(node *html.Node, callback func(*html.Node)bool) *html.Nod
 	}
 
 	for c := node; c != nil; c = c.NextSibling {
-		return s.Walk(node, callback);
+		return s.WalkToFirst(node, callback);
 	}
 
 	return nil;
