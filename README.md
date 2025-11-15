@@ -1,7 +1,7 @@
 # WebScraper 📦
 
 A lightweight, modular, and extensible Go-based web scraping library.
-Designed with simplicity in mind — built for developers who want full control over requests, parsing, and extraction… without the bloat.
+Designed with simplicity in mind built for developers who want full control over requests, parsing, and extraction… without the bloat.
 
 ## 🚀 Overview
 
