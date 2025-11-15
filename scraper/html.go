@@ -141,3 +141,16 @@ func (s *Scraper) WalkToFirst(node *html.Node, callback func(*html.Node)bool) *h
 	return nil;
 
 }
+
+func (s *Scraper) Ancestors(node *html.Node) []*html.Node{
+
+	if node == nil { return nil }
+
+	var ancestors []*html.Node;
+
+	for c := node.Parent; c != nil; c = c.Parent {
+		ancestors = append(ancestors, c);
+	}
+
+	return ancestors;
+}
