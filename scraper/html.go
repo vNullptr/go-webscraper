@@ -42,14 +42,14 @@ func (s *Scraper) NthChild(node *html.Node, index int) *html.Node {
 
 	if node == nil { return nil }
 
-	child := node;
+	child := node.FirstChild;
 
 	for range index {
 
-		if node.NextSibling == nil {
+		if child.NextSibling == nil {
 			return nil;
 		}
-		child = node.NextSibling;
+		child = child.NextSibling;
 
 	}
 
