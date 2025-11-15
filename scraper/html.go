@@ -125,23 +125,6 @@ func (s *Scraper) IsTag(node *html.Node, tagname string) bool {
 	return false;
 }
 
-// this search's tags but can't be doing one for class by tag then class by class ect ect ...
-// will probably use a func callback as argument
-func (s *Scraper) FirstUntilTag(node *html.Node, key string, value string, limiterTag string) *html.Node {
-	
-	if node == nil || s.IsTag(node, limiterTag) { return nil; }
-
-	if s.HasAttr(node, key, value){
-		return node;
-	}
-
-	for c := node; c != nil; c = c.NextSibling {
-		return s.FirstUntilTag(c, key, value, limiterTag);
-	}
-
-	return nil;
-}
-
 // will still keep the other commonly used function and keep this one for more specific search
 func (s *Scraper) Walk(node *html.Node, callback func(*html.Node)bool) *html.Node{
 
