@@ -10,10 +10,6 @@ import (
 
 func (s *Scraper) ParseHTML() error {
 
-	if len(s.targetData) == 0 {
-		panic("Target data units not initialized !");
-	}
-
 	rawHTML := bytes.NewReader(s.GetUnparsedHTML());
 	doc, err := html.Parse(rawHTML);
 	if err != nil {

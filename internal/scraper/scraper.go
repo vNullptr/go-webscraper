@@ -1,7 +1,6 @@
 package scraper
 
 import (
-	"fmt"
 	"sync"
 
 	"golang.org/x/net/html"
@@ -11,10 +10,8 @@ type Scraper struct {
 	// to be implemented
 	// will regroup everything needed for scraping
 	// from result of url download to parsing result ect ...
-
 	mu           sync.RWMutex
 	unparsedHTML []byte
-	targetData   []DataUnit
 
 	// this might stay unused for a little while but will store the root of page
 	// will also be copied and clean up into another node tree
@@ -24,28 +21,6 @@ type Scraper struct {
 // thinking about making timeout tied to the scraper instance
 func NewScraper() *Scraper {
 	return &Scraper{}
-}
-
-// still defaulting to string type haven't done any testing with the interface
-func (s *Scraper) DataUnit(name string, dataType string, selectorMap map[string][]string) {
-	s.mu.Lock()
-	defer s.mu.Unlock()
-
-	du := DataUnit{
-		name:      name,
-		dataType:  dataType,
-		data:      []string{}, 
-		selectors: selectorMap,
-	}
-
-	s.targetData = append(s.targetData, du)
-}
-
-
-func (s *Scraper) DebugShowData(){
-	for _, dataUnit := range s.targetData {
-		fmt.Println(dataUnit.data)
-	}
 }
 
 
