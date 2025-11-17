@@ -3,13 +3,13 @@ package main
 import (
 	"fmt"
 
-	scraper "webscraper/internal/scraper"
+	"webscraper/pkg/scraper"
 )
 
 
 func main() {
 
-	s := scraper.NewScraper();
+	s := scraper.CreateScraper();
 	s.FetchURL("https://example.com", "GET", nil);
 	s.ParseHTML();
 	

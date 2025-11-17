@@ -16,9 +16,9 @@ type Scraper struct {
 	unparsedHTML []byte
 	targetData   []DataUnit
 
-	// this might stay unused for a little while but will store the root of page 
-	// will also be copied and clean up into another node tree 
-	htmlRoot *html.Node 
+	// this might stay unused for a little while but will store the root of page
+	// will also be copied and clean up into another node tree
+	htmlRoot *html.Node
 }
 
 // thinking about making timeout tied to the scraper instance
