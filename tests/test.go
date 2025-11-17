@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	scraper "webscraper/internal"
+	scraper "webscraper/internal/scraper"
 )
 
 
