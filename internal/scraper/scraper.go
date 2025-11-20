@@ -7,7 +7,6 @@ import (
 )
 
 type Scraper struct {
-	// to be implemented
 	// will regroup everything needed for scraping
 	// from result of url download to parsing result ect ...
 	mu           sync.RWMutex
@@ -22,7 +21,6 @@ type Scraper struct {
 func NewScraper() *Scraper {
 	return &Scraper{}
 }
-
 
 func (s *Scraper) GetUnparsedHTML() []byte {
 	// for thread safety ( because we're having concurrent access)

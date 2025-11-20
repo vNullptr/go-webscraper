@@ -9,8 +9,6 @@ import (
 	"time"
 )
 
-// removed httpClient struct its not needed
-
 // need to add custom header handling
 func (s *Scraper) FetchURL(rawUrl string, method string, ctx context.Context) (int, error) {
 
@@ -44,21 +42,21 @@ func (s *Scraper) FetchURL(rawUrl string, method string, ctx context.Context) (i
 }
 
 func (s *Scraper) FetchURLWithRetry(rawUrl string, method string, timeoutDelay int, limit int) error {
-    for i := 0; i < limit; i++ {
-        ctx, cancel := context.WithTimeout(context.Background(), time.Duration(timeoutDelay)*time.Second)
+	for i := 0; i < limit; i++ {
+		ctx, cancel := context.WithTimeout(context.Background(), time.Duration(timeoutDelay)*time.Second)
 
-        status, err := s.FetchURL(rawUrl, method, ctx)
-        cancel() // call per-iteration to avoid leaking resources
+		status, err := s.FetchURL(rawUrl, method, ctx)
+		cancel() // call per-iteration to avoid leaking resources
 
-        if err == nil && status >= 200 && status < 300 {
-            return nil
-        }
+		if err == nil && status >= 200 && status < 300 {
+			return nil
+		}
 
-        // non-retryable client error (except 429)
-        if err == nil && status >= 400 && status < 500 && status != 429 {
-            return fmt.Errorf("non-retryable status %d", status)
-        }
-    }
+		// non-retryable client error (except 429)
+		if err == nil && status >= 400 && status < 500 && status != 429 {
+			return fmt.Errorf("non-retryable status %d", status)
+		}
+	}
 
-    return fmt.Errorf("all %d attempts failed", limit)
+	return fmt.Errorf("all %d attempts failed", limit)
 }
