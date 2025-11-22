@@ -8,37 +8,58 @@ type HTMLAttribute struct {
 	Name, Val string
 }
 
-type HTMLType uint16
-
 type HTMLNodeWpr struct {
 
 	Prev, Next *HTMLNodeWpr
 
 	Data string
-	Attr HTMLAttribute
-	Type HTMLType 
+	Attrs []HTMLAttribute
+	Type html.NodeType // thougth it would be useless to have my own
 }
 
-func cleanUp(dirtyNodeTree *html.Node) HTMLNodeWpr {
+func cleanUp(dirtyNodeTree *html.Node) *HTMLNodeWpr {
+
+	if dirtyNodeTree == nil {
+		return nil
+	}
 
 	node := HTMLNodeWpr{}
 
-	return node
+	return &node
 
 }
 
 func (node *HTMLNodeWpr) InsertSiblingAfter(sibling *HTMLNodeWpr){
+	
+	if (node == nil || sibling == nil) { return }
+	
+	sibling.Prev = node
+	sibling.Next = node.Next
+
 	if node.Next != nil {
-		sibling.Next = node.Next
+		node.Next.Prev = sibling
 	}
 
 	node.Next = sibling
 }
 
 func (node *HTMLNodeWpr) InsertSiblingBefore(sibling *HTMLNodeWpr){
-	if node.Prev!= nil {
-		sibling.Prev = node.Prev
-	}
-
+    if node == nil || sibling == nil { return }
+    
+	sibling.Next = node
+    sibling.Prev = node.Prev
+    
+	if node.Prev != nil {
+        node.Prev.Next = sibling
+    }
+    
 	node.Prev = sibling
+
+}
+
+func (node *HTMLNodeWpr) DeleteNode(){
+	node.Prev.Next = node.Next
+	node.Next.Prev = node.Prev
+
+	node = &HTMLNodeWpr{}
 }
