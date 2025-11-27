@@ -10,7 +10,7 @@ type HTMLAttribute struct {
 
 type HTMLNodeWpr struct {
 
-	Prev, Next *HTMLNodeWpr
+	Prev, Next, FirstChild, LastChild *HTMLNodeWpr
 
 	Data string
 	Attrs []HTMLAttribute
@@ -70,5 +70,20 @@ func (node *HTMLNodeWpr) DeleteNode(){
 
 	node.Next = nil
 	node.Prev = nil 
+
+}
+
+func (node *HTMLNodeWpr) AppendNode(child *HTMLNodeWpr){
+	
+	if node == nil || child == nil {return}
+
+	if (node.LastChild != nil){
+		node.LastChild.Next = child
+		child.Prev = node.LastChild
+	} else {
+		node.FirstChild = child
+	}
+
+	node.LastChild = child
 
 }
