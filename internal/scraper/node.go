@@ -102,3 +102,15 @@ func (node *HTMLNodeWpr) GetDepth() int {
 
 	return 1 + node.Parent.GetDepth()
 }
+
+
+func (node *HTMLNodeWpr) Siblings() []*HTMLNodeWpr{
+	if node == nil {return nil}
+	
+	var siblings []*HTMLNodeWpr
+	for s := node.FirstChild; s != nil; s = s.Next {
+		siblings = append(siblings, s)
+	}
+
+	return siblings
+}
