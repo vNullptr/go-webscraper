@@ -15,8 +15,8 @@ The goal is to provide:
 
 ## ✨ Current Features
 
-- URL Fetching — simple, reliable download layer.
-- Basic HTML Parsing — uses Go’s html parser under the hood.
+- URL Fetching — simple download layer.
+- Basic HTML Parsing — uses Go’s html parser.
 - Element Extraction Helpers — early utilities for scraping text, attributes, and nodes. ( temporary, will change as soon as node tree is done )
 
 ## 🔧 Technical Focus (Work in Progress)
