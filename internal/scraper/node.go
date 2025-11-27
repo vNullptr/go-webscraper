@@ -17,12 +17,14 @@ type HTMLNodeWpr struct {
 	Type html.NodeType // thougth it would be useless to have my own
 }
 
-func cleanUp(dirtyNodeTree *html.Node) *HTMLNodeWpr {
+func copyTree(dirtyNodeTree *html.Node) *HTMLNodeWpr {
 	if dirtyNodeTree == nil {
 		return nil
 	}
 
 	node := HTMLNodeWpr{}
+
+	
 
 	return &node
 }
