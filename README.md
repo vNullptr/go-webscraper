@@ -17,13 +17,12 @@ The goal is to provide:
 
 - URL Fetching — simple, reliable download layer.
 - Basic HTML Parsing — uses Go’s html parser under the hood.
-- Element Extraction Helpers — early utilities for scraping text, attributes, and nodes.
+- Element Extraction Helpers — early utilities for scraping text, attributes, and nodes. ( temporary, will change as soon as node tree is done )
 
 ## 🔧 Technical Focus (Work in Progress)
 
-- Cleaning and normalizing the golang.org/x/net/html node tree.
-- Designing my own custom internal DOM representation for easier traversal and querying.
-- Reworking the structure to be intuitive, documented, and stable.
+- Cleaning and normalizing the golang.org/x/net/html node tree with my own node tree.
+- Designing my own custom internal DOM representation for easier and optimized traversal and querying.
 
 ## 🧭 Roadmap / Planned Features
 ### Networking
@@ -42,4 +41,4 @@ The goal is to provide:
 
 - Native concurrency enabled scraping
 
-## ⚠️ The current repository structure is provisional, a full cleanup and reorganization is planned.
+## ⚠️ The current repository structure is provisional, a full cleanup and reorganization is on going.
