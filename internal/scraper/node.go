@@ -86,13 +86,6 @@ func (node *HTMLNodeWpr) AppendNode(child *HTMLNodeWpr){
 	child.Parent = node
 }
 
-func (node *HTMLNodeWpr) HasChild() bool {
-	if node == nil { return false }
-
-	return node.FirstChild != nil
-
-}
-
 func (node *HTMLNodeWpr) GetDepth() int {
 	if node == nil {return -1}
 
@@ -102,7 +95,6 @@ func (node *HTMLNodeWpr) GetDepth() int {
 
 	return 1 + node.Parent.GetDepth()
 }
-
 
 func (node *HTMLNodeWpr) Siblings() []*HTMLNodeWpr{
 	if node == nil {return nil}
