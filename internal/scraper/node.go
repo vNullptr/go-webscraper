@@ -18,7 +18,6 @@ type HTMLNodeWpr struct {
 }
 
 func cleanUp(dirtyNodeTree *html.Node) *HTMLNodeWpr {
-
 	if dirtyNodeTree == nil {
 		return nil
 	}
@@ -26,11 +25,9 @@ func cleanUp(dirtyNodeTree *html.Node) *HTMLNodeWpr {
 	node := HTMLNodeWpr{}
 
 	return &node
-
 }
 
 func (node *HTMLNodeWpr) InsertSiblingAfter(sibling *HTMLNodeWpr){
-	
 	if (node == nil || sibling == nil) { return }
 	
 	sibling.Prev = node
@@ -54,11 +51,9 @@ func (node *HTMLNodeWpr) InsertSiblingBefore(sibling *HTMLNodeWpr){
     }
     
 	node.Prev = sibling
-
 }
 
 func (node *HTMLNodeWpr) DeleteNode(){
-
 	if node == nil { return }
 
 	if node.Prev != nil {
@@ -70,11 +65,9 @@ func (node *HTMLNodeWpr) DeleteNode(){
 
 	node.Next = nil
 	node.Prev = nil 
-
 }
 
 func (node *HTMLNodeWpr) AppendNode(child *HTMLNodeWpr){
-	
 	if node == nil || child == nil {return}
 
 	if (node.LastChild != nil){
@@ -85,5 +78,16 @@ func (node *HTMLNodeWpr) AppendNode(child *HTMLNodeWpr){
 	}
 
 	node.LastChild = child
-
 }
+
+func (node *HTMLNodeWpr) HasChild() bool {
+	if node == nil {return false}
+
+	if node.FirstChild == nil && node.LastChild == nil {
+		return false 
+	} 
+
+	return true
+}
+
+
