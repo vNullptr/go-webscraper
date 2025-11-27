@@ -100,9 +100,16 @@ func (node *HTMLNodeWpr) Siblings() []*HTMLNodeWpr{
 	if node == nil {return nil}
 	
 	var siblings []*HTMLNodeWpr
-	for s := node.FirstChild; s != nil; s = s.Next {
+	for s := node; s != nil; s = s.Next {
 		siblings = append(siblings, s)
 	}
 
 	return siblings
+}
+
+func (node *HTMLNodeWpr) Childrens() []*HTMLNodeWpr{
+	if node == nil {return nil}
+	if node.FirstChild == nil {return nil}
+
+	return node.FirstChild.Siblings()
 }
