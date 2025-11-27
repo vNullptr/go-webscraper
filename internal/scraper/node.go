@@ -10,7 +10,7 @@ type HTMLAttribute struct {
 
 type HTMLNodeWpr struct {
 
-	Prev, Next, FirstChild, LastChild *HTMLNodeWpr
+	Prev, Next, FirstChild, LastChild, Parent *HTMLNodeWpr
 
 	Data string
 	Attrs []HTMLAttribute
@@ -38,6 +38,7 @@ func (node *HTMLNodeWpr) InsertSiblingAfter(sibling *HTMLNodeWpr){
 	}
 
 	node.Next = sibling
+	sibling.Parent = node.Parent
 }
 
 func (node *HTMLNodeWpr) InsertSiblingBefore(sibling *HTMLNodeWpr){
@@ -51,6 +52,7 @@ func (node *HTMLNodeWpr) InsertSiblingBefore(sibling *HTMLNodeWpr){
     }
     
 	node.Prev = sibling
+	sibling.Parent = node.Parent
 }
 
 func (node *HTMLNodeWpr) DeleteNode(){
@@ -65,6 +67,7 @@ func (node *HTMLNodeWpr) DeleteNode(){
 
 	node.Next = nil
 	node.Prev = nil 
+	node.Parent = nil
 }
 
 func (node *HTMLNodeWpr) AppendNode(child *HTMLNodeWpr){
@@ -78,16 +81,22 @@ func (node *HTMLNodeWpr) AppendNode(child *HTMLNodeWpr){
 	}
 
 	node.LastChild = child
+	child.Parent = node
 }
 
 func (node *HTMLNodeWpr) HasChild() bool {
-	if node == nil {return false}
+	if node == nil { return false }
 
-	if node.FirstChild == nil && node.LastChild == nil {
-		return false 
-	} 
+	return node.FirstChild != nil
 
-	return true
 }
 
+func (node *HTMLNodeWpr) GetDepth() int {
+	if node == nil {return -1}
 
+	if node.Parent == nil {
+		return 1
+	}
+
+	return 1 + node.Parent.GetDepth()
+}
