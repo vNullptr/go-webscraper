@@ -95,7 +95,7 @@ func (node *HTMLNodeWpr) GetDepth() int {
 	if node == nil {return -1}
 
 	if node.Parent == nil {
-		return 1
+		return 0
 	}
 
 	return 1 + node.Parent.GetDepth()
