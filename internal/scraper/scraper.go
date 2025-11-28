@@ -35,6 +35,13 @@ func (s *Scraper) GetUnparsedHTML() []byte {
 	return cp
 }
 
+func (s *Scraper) SetUnparsedHTML(uh []byte) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	s.unparsedHTML = uh 
+}
+
 func (s *Scraper) Scrape() {
 	// for later
 }
