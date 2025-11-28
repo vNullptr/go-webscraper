@@ -9,7 +9,10 @@ import (
 func main() {
 
 	s := scraper.CreateScraper();
-	s.FetchURL("https://example.com", "GET", nil);
+	buffer, _, err := scraper.FetchURL("https://example.com", "GET", nil)
+	if (err == nil && len(buffer) > 0) {
+		s.SetUnparsedHTML(buffer)
+	}
 
 	fmt.Println(s.GetUnparsedHTML())
 }
