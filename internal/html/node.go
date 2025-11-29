@@ -2,8 +2,6 @@ package html
 
 import "golang.org/x/net/html"
 
-// no idea if i should make structs for attribute and type
-// instead of using a string map
 type HTMLAttribute struct {
 	Name, Val string
 }
@@ -22,11 +20,37 @@ func copyTree(dirtyNodeTree *html.Node) *HTMLNodeWpr {
 		return nil
 	}
 
-	node := HTMLNodeWpr{}
+	node := &HTMLNodeWpr{}
+	node.Data = dirtyNodeTree.Data
+	node.Type = dirtyNodeTree.Type
 
+	if len(dirtyNodeTree.Attr) > 0 {
+		for _, attr := range dirtyNodeTree.Attr {
+			newAttr := HTMLAttribute{}
+			newAttr.Name = attr.Key
+			newAttr.Val = attr.Val
+			node.Attrs = append(node.Attrs, newAttr)
+		}
+	}
+
+	// childrens
+	if dirtyNodeTree.FirstChild != nil {
+		child := copyTree(dirtyNodeTree.FirstChild)
+		if node.FirstChild == nil { 
+			node.FirstChild = child 
+		}
+		node.LastChild = child
+		node.AppendNode(child)
+	}
+	
+	//siblings
+	if dirtyNodeTree.NextSibling != nil {
+		sibling := copyTree(dirtyNodeTree.NextSibling)
+		node.InsertSiblingAfter(sibling)
+	}
 	
 
-	return &node
+	return node
 }
 
 func (node *HTMLNodeWpr) InsertSiblingAfter(sibling *HTMLNodeWpr){
@@ -96,7 +120,7 @@ func (node *HTMLNodeWpr) GetDepth() int {
 	return 1 + node.Parent.GetDepth()
 }
 
-func (node *HTMLNodeWpr) Siblings() []*HTMLNodeWpr{
+func (node *HTMLNodeWpr) Sibling() []*HTMLNodeWpr{
 	if node == nil {return nil}
 	
 	var siblings []*HTMLNodeWpr
@@ -107,9 +131,9 @@ func (node *HTMLNodeWpr) Siblings() []*HTMLNodeWpr{
 	return siblings
 }
 
-func (node *HTMLNodeWpr) Childrens() []*HTMLNodeWpr{
+func (node *HTMLNodeWpr) Children() []*HTMLNodeWpr{
 	if node == nil {return nil}
 	if node.FirstChild == nil {return nil}
 
-	return node.FirstChild.Siblings()
+	return node.FirstChild.Sibling()
 }
