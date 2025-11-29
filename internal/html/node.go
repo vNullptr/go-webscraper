@@ -96,10 +96,16 @@ func (node *HTMLNodeWpr) DeleteNode(){
 
 	if node.Prev != nil {
 		node.Prev.Next = node.Next
+	} else {
+		node.Parent.FirstChild = node.Next
 	}
+
 	if node.Next != nil {
 		node.Next.Prev = node.Prev
+	} else {
+		node.Parent.LastChild = node.Prev
 	}
+
 
 	node.Next = nil
 	node.Prev = nil 
