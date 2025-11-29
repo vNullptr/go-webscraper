@@ -57,7 +57,11 @@ func (node *HTMLNodeWpr) InsertSiblingAfter(sibling *HTMLNodeWpr){
 	if (node == nil || sibling == nil) { return }
 	
 	sibling.Prev = node
-	sibling.Next = node.Next
+	if (node.Next == nil){
+		node.Parent.LastChild = sibling
+	} else {
+		sibling.Next = node.Next
+	}
 
 	if node.Next != nil {
 		node.Next.Prev = sibling
@@ -65,13 +69,18 @@ func (node *HTMLNodeWpr) InsertSiblingAfter(sibling *HTMLNodeWpr){
 
 	node.Next = sibling
 	sibling.Parent = node.Parent
+
 }
 
 func (node *HTMLNodeWpr) InsertSiblingBefore(sibling *HTMLNodeWpr){
     if node == nil || sibling == nil { return }
     
 	sibling.Next = node
-    sibling.Prev = node.Prev
+	if (node.Prev == nil){
+		node.Parent.FirstChild = sibling
+	} else {
+		sibling.Prev = node.Prev
+	}
     
 	if node.Prev != nil {
         node.Prev.Next = sibling
@@ -79,6 +88,7 @@ func (node *HTMLNodeWpr) InsertSiblingBefore(sibling *HTMLNodeWpr){
     
 	node.Prev = sibling
 	sibling.Parent = node.Parent
+
 }
 
 func (node *HTMLNodeWpr) DeleteNode(){
