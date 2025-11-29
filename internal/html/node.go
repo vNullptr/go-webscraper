@@ -126,21 +126,38 @@ func (node *HTMLNodeWpr) AppendNode(child *HTMLNodeWpr){
 	child.Parent = node
 }
 
-func (node *HTMLNodeWpr) GetDepth() int {
+func (node *HTMLNodeWpr) GetDepth() int64 {
 	if node == nil {return -1}
 
+	var depth int64 = 0
+
 	if node.Parent == nil {
-		return 0
+		return depth
 	}
 
-	return 1 + node.Parent.GetDepth()
+	for p := node.Parent; p != nil; p = p.Parent {
+		depth++
+	}
+
+	return depth
 }
 
 func (node *HTMLNodeWpr) Sibling() []*HTMLNodeWpr{
 	if node == nil {return nil}
 	
 	var siblings []*HTMLNodeWpr
-	for s := node; s != nil; s = s.Next {
+
+	// walking to first child
+	var start *HTMLNodeWpr
+	if node.Parent != nil {
+		start = node.Parent.FirstChild
+	} else {
+		for s := node.Prev; s != nil; s = s.Prev{
+			start = s
+		}
+	}
+
+	for s := start; s != nil; s = s.Next {
 		siblings = append(siblings, s)
 	}
 
