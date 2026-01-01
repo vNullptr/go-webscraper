@@ -6,21 +6,20 @@ type HTMLAttribute struct {
 	Name, Val string
 }
 
-type HTMLNodeWpr struct {
+type HTMLNodeWrapper struct {
+	Prev, Next, FirstChild, LastChild, Parent *HTMLNodeWrapper
 
-	Prev, Next, FirstChild, LastChild, Parent *HTMLNodeWpr
-
-	Data string
+	Data  string
 	Attrs []HTMLAttribute
-	Type html.NodeType // thougth it would be useless to have my own
+	Type  html.NodeType // thougth it would be useless to have my own
 }
 
-func copyTree(dirtyNodeTree *html.Node) *HTMLNodeWpr {
+func copyTree(dirtyNodeTree *html.Node) *HTMLNodeWrapper {
 	if dirtyNodeTree == nil {
 		return nil
 	}
 
-	node := &HTMLNodeWpr{}
+	node := &HTMLNodeWrapper{}
 	node.Data = dirtyNodeTree.Data
 	node.Type = dirtyNodeTree.Type
 
@@ -36,28 +35,29 @@ func copyTree(dirtyNodeTree *html.Node) *HTMLNodeWpr {
 	// childrens
 	if dirtyNodeTree.FirstChild != nil {
 		child := copyTree(dirtyNodeTree.FirstChild)
-		if node.FirstChild == nil { 
-			node.FirstChild = child 
+		if node.FirstChild == nil {
+			node.FirstChild = child
 		}
 		node.LastChild = child
 		node.AppendNode(child)
 	}
-	
+
 	//siblings
 	if dirtyNodeTree.NextSibling != nil {
 		sibling := copyTree(dirtyNodeTree.NextSibling)
 		node.InsertSiblingAfter(sibling)
 	}
-	
 
 	return node
 }
 
-func (node *HTMLNodeWpr) InsertSiblingAfter(sibling *HTMLNodeWpr){
-	if (node == nil || sibling == nil) { return }
-	
+func (node *HTMLNodeWrapper) InsertSiblingAfter(sibling *HTMLNodeWrapper) {
+	if node == nil || sibling == nil {
+		return
+	}
+
 	sibling.Prev = node
-	if (node.Next == nil){
+	if node.Next == nil {
 		node.Parent.LastChild = sibling
 	} else {
 		sibling.Next = node.Next
@@ -72,27 +72,31 @@ func (node *HTMLNodeWpr) InsertSiblingAfter(sibling *HTMLNodeWpr){
 
 }
 
-func (node *HTMLNodeWpr) InsertSiblingBefore(sibling *HTMLNodeWpr){
-    if node == nil || sibling == nil { return }
-    
+func (node *HTMLNodeWrapper) InsertSiblingBefore(sibling *HTMLNodeWrapper) {
+	if node == nil || sibling == nil {
+		return
+	}
+
 	sibling.Next = node
-	if (node.Prev == nil){
+	if node.Prev == nil {
 		node.Parent.FirstChild = sibling
 	} else {
 		sibling.Prev = node.Prev
 	}
-    
+
 	if node.Prev != nil {
-        node.Prev.Next = sibling
-    }
-    
+		node.Prev.Next = sibling
+	}
+
 	node.Prev = sibling
 	sibling.Parent = node.Parent
 
 }
 
-func (node *HTMLNodeWpr) DeleteNode(){
-	if node == nil { return }
+func (node *HTMLNodeWrapper) DeleteNode() {
+	if node == nil {
+		return
+	}
 
 	if node.Prev != nil {
 		node.Prev.Next = node.Next
@@ -106,16 +110,17 @@ func (node *HTMLNodeWpr) DeleteNode(){
 		node.Parent.LastChild = node.Prev
 	}
 
-
 	node.Next = nil
-	node.Prev = nil 
+	node.Prev = nil
 	node.Parent = nil
 }
 
-func (node *HTMLNodeWpr) AppendNode(child *HTMLNodeWpr){
-	if node == nil || child == nil {return}
+func (node *HTMLNodeWrapper) AppendNode(child *HTMLNodeWrapper) {
+	if node == nil || child == nil {
+		return
+	}
 
-	if (node.LastChild != nil){
+	if node.LastChild != nil {
 		node.LastChild.Next = child
 		child.Prev = node.LastChild
 	} else {
@@ -126,8 +131,10 @@ func (node *HTMLNodeWpr) AppendNode(child *HTMLNodeWpr){
 	child.Parent = node
 }
 
-func (node *HTMLNodeWpr) GetDepth() int64 {
-	if node == nil {return -1}
+func (node *HTMLNodeWrapper) GetDepth() int64 {
+	if node == nil {
+		return -1
+	}
 
 	var depth int64 = 0
 
@@ -142,17 +149,19 @@ func (node *HTMLNodeWpr) GetDepth() int64 {
 	return depth
 }
 
-func (node *HTMLNodeWpr) Sibling() []*HTMLNodeWpr{
-	if node == nil {return nil}
-	
-	var siblings []*HTMLNodeWpr
+func (node *HTMLNodeWrapper) Sibling() []*HTMLNodeWrapper {
+	if node == nil {
+		return nil
+	}
+
+	var siblings []*HTMLNodeWrapper
 
 	// walking to first child
-	var start *HTMLNodeWpr
+	var start *HTMLNodeWrapper
 	if node.Parent != nil {
 		start = node.Parent.FirstChild
 	} else {
-		for s := node.Prev; s != nil; s = s.Prev{
+		for s := node.Prev; s != nil; s = s.Prev {
 			start = s
 		}
 	}
@@ -164,9 +173,13 @@ func (node *HTMLNodeWpr) Sibling() []*HTMLNodeWpr{
 	return siblings
 }
 
-func (node *HTMLNodeWpr) Children() []*HTMLNodeWpr{
-	if node == nil {return nil}
-	if node.FirstChild == nil {return nil}
+func (node *HTMLNodeWrapper) Children() []*HTMLNodeWrapper {
+	if node == nil {
+		return nil
+	}
+	if node.FirstChild == nil {
+		return nil
+	}
 
 	return node.FirstChild.Sibling()
 }
